@@ -1,0 +1,4 @@
+.git/
+kayo-player/build/
+kayo-player/node_modules/
+kayo-server/target/

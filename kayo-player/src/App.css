@@ -1,0 +1,17 @@
+.App {
+  padding-bottom: 56px;
+}
+
+@media (min-width: 0px) {
+  @media (orientation: landscape) {
+    .App {
+      padding-bottom: 48px;
+    }
+  }
+}
+
+@media (min-width: 600px) {
+  .App {
+    padding-bottom: 64px;
+  }
+}

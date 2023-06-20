@@ -10,9 +10,9 @@
     "test": "react-scripts test"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.299.0",
-    "@aws-sdk/credential-providers": "^3.299.0",
-    "@aws-sdk/s3-request-presigner": "^3.299.0",
+    "@aws-sdk/client-s3": "^3.354.0",
+    "@aws-sdk/credential-providers": "^3.354.0",
+    "@aws-sdk/s3-request-presigner": "^3.354.0",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@mui/icons-material": "^5.11.11",

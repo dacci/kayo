@@ -1,4 +1,4 @@
-use aws_sdk_s3::output::ListObjectsV2Output;
+use aws_sdk_s3::operation::list_objects_v2::ListObjectsV2Output;
 use aws_smithy_types::date_time::Format;
 use axum::http::header::CONTENT_TYPE;
 use axum::http::StatusCode;
@@ -81,7 +81,7 @@ impl IntoResponse for ListBucketResult {
 }
 
 #[repr(transparent)]
-struct Contents<'a>(&'a aws_sdk_s3::model::Object);
+struct Contents<'a>(&'a aws_sdk_s3::types::Object);
 
 impl Serialize for Contents<'_> {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
@@ -123,7 +123,7 @@ impl Serialize for Contents<'_> {
 }
 
 #[repr(transparent)]
-struct CommonPrefixes<'a>(&'a aws_sdk_s3::model::CommonPrefix);
+struct CommonPrefixes<'a>(&'a aws_sdk_s3::types::CommonPrefix);
 
 impl Serialize for CommonPrefixes<'_> {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
@@ -138,7 +138,7 @@ impl Serialize for CommonPrefixes<'_> {
 }
 
 #[repr(transparent)]
-struct Owner<'a>(&'a aws_sdk_s3::model::Owner);
+struct Owner<'a>(&'a aws_sdk_s3::types::Owner);
 
 impl Serialize for Owner<'_> {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {

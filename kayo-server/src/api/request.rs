@@ -1,4 +1,4 @@
-use aws_sdk_s3::input::ListObjectsV2Input;
+use aws_sdk_s3::operation::list_objects_v2::ListObjectsV2Input;
 use serde::de;
 use std::fmt;
 use std::marker::PhantomData;

@@ -2,8 +2,8 @@ mod error;
 mod request;
 mod response;
 
-use aws_sdk_s3::model::{CommonPrefix, Object};
-use aws_sdk_s3::output::ListObjectsV2Output;
+use aws_sdk_s3::operation::list_objects_v2::ListObjectsV2Output;
+use aws_sdk_s3::types::{CommonPrefix, Object};
 use axum::extract::{Path as Uri, Query};
 use axum::http::Request;
 use axum::response::Response;

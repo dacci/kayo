@@ -1,8 +1,7 @@
-import React from 'react';
 import {Link, ScrollRestoration, useLoaderData} from 'react-router-dom';
 import {List, ListItem, ListItemButton, ListItemIcon, ListItemText} from '@mui/material';
 import {Description, Folder} from '@mui/icons-material';
-import {GetObjectCommand, ListObjectsV2CommandOutput, S3Client} from '@aws-sdk/client-s3';
+import {GetObjectCommand, type ListObjectsV2CommandOutput, S3Client} from '@aws-sdk/client-s3';
 import {getSignedUrl} from '@aws-sdk/s3-request-presigner';
 
 const basename = (path: string) => path.split('/').reverse().find(s => s.length);

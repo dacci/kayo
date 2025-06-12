@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import {useMemo} from 'react';
 import {createHashRouter, Navigate, RouterProvider} from 'react-router-dom';
 import {AppBar, Box, createTheme, CssBaseline, ThemeProvider, useMediaQuery} from '@mui/material';
 import {ListObjectsV2Command, S3Client} from '@aws-sdk/client-s3';
@@ -7,7 +7,7 @@ import './App.css';
 import {CastControl, MediaChooser} from './component';
 import {CastProvider} from './context';
 
-const BUCKET = process.env.REACT_APP_BUCKET || 'contents';
+const BUCKET = import.meta.env.VITE_APP_BUCKET || 'contents';
 
 function App() {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)', {noSsr: true});
@@ -18,19 +18,19 @@ function App() {
   }), [prefersDarkMode]);
 
   const s3 = useMemo(() => {
-    if (process.env.REACT_APP_IDENTITY_POOL_ID) {
-      const region = process.env.REACT_APP_IDENTITY_POOL_ID.split(':')[0];
+    if (import.meta.env.VITE_APP_IDENTITY_POOL_ID) {
+      const region = import.meta.env.VITE_APP_IDENTITY_POOL_ID.split(':')[0];
       return new S3Client({
         region,
         credentials: fromCognitoIdentityPool({
-          identityPoolId: process.env.REACT_APP_IDENTITY_POOL_ID,
+          identityPoolId: import.meta.env.VITE_APP_IDENTITY_POOL_ID,
           clientConfig: {region},
         }),
       });
     } else {
       return new S3Client({
         region: 'us-east-1',
-        endpoint: process.env.REACT_APP_API_ENDPOINT || window.location.origin + window.location.pathname + 'api',
+        endpoint: import.meta.env.VITE_APP_API_ENDPOINT || window.location.origin + window.location.pathname + 'api',
         forcePathStyle: true,
         credentials: {
           accessKeyId: '',

@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import {Divider, IconButton, Slider, Toolbar} from '@mui/material';
 import {Cast, CastConnected, FastForward, FastRewind, Pause, PlayArrow, Stop} from '@mui/icons-material';
 import {CastContext} from '../context';
@@ -65,7 +65,7 @@ function CastControl() {
       .getInstance()
       .getCurrentSession()
       ?.getMediaSession()
-      ?.seek(request, resolve, reject);
+      ?.seek(request, resolve as () => void, reject);
   });
 
   return (
@@ -116,11 +116,11 @@ function CastControl() {
         value={currentTime}
         valueLabelDisplay='auto'
         valueLabelFormat={(value) => playerController?.getFormattedTime(value)}
-        onChange={(event, value) => {
+        onChange={(_, value) => {
           setDragging(true);
           setCurrentTime(value as number);
         }}
-        onChangeCommitted={(event, value) => {
+        onChangeCommitted={(_, value) => {
           setDragging(false);
           return seekTo(value as number);
         }}

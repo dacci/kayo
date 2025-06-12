@@ -1,4 +1,4 @@
-import React, {ReactNode, useEffect, useMemo, useState} from 'react';
+import {type ReactNode, useEffect, useMemo, useState} from 'react';
 import CastContext from './CastContext';
 
 interface CastProviderProps {

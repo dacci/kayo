@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 anyhow = "1.0.75"
-aws-sdk-s3 = { version = "0.31.0", default-features = false }
+aws-sdk-s3 = { version = "1.112.0", default-features = false }
 aws-smithy-types = "0.56.1"
 axum = "0.6.20"
 bytes = "1.11.1"

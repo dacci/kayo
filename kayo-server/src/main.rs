@@ -5,6 +5,7 @@ use anyhow::Result;
 use axum::routing::any_service;
 use clap::Parser;
 use std::path::PathBuf;
+use tokio::net::TcpListener;
 use tower_http::cors::CorsLayer;
 use tower_http::services::ServeDir;
 use tracing::{debug, error, info};
@@ -121,9 +122,15 @@ async fn async_main(args: Args) -> Result<()> {
         app = app.layer(CorsLayer::permissive());
     }
 
-    let server = axum::Server::bind(&args.bind.parse()?).serve(app.into_make_service());
-    info!("server started on {}", server.local_addr());
-    server.with_graceful_shutdown(receive_signal()).await?;
+    let listener = TcpListener::bind(&args.bind).await?;
+    if let Ok(addr) = listener.local_addr() {
+        info!("server started on {}", addr);
+    } else {
+        info!("server started");
+    }
 
+    axum::serve(listener, app)
+        .with_graceful_shutdown(receive_signal())
+        .await?;
     Ok(())
 }

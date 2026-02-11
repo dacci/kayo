@@ -9,14 +9,14 @@ edition = "2021"
 anyhow = "1.0.75"
 aws-sdk-s3 = { version = "1.122.0", default-features = false }
 aws-smithy-types = "1.4.4"
-axum = "0.6.20"
+axum = "0.8.8"
 bytes = "1.5.0"
 clap = { version = "4.4.4", features = ["derive"] }
 futures = { version = "0.3.28", default-features = false, features = ["std"] }
 serde = { version = "1.0.188", features = ["derive"] }
 tokio = { version = "1.38.2", features = ["macros", "rt-multi-thread", "signal"] }
-tower = "0.4.13"
-tower-http = { version = "0.4.4", features = ["cors", "fs"] }
+tower = "0.5.3"
+tower-http = { version = "0.6.8", features = ["cors", "fs"] }
 tracing = "0.1.37"
 tracing-subscriber = { version = "0.3.20", features = ["env-filter"] }
 xml-rs = "0.8.18"

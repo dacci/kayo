@@ -22,7 +22,7 @@ impl Serialize for ListBucketResult {
 
         s.serialize_field("IsTruncated", &self.0.is_truncated())?;
 
-        if let Some(contents) = self.0.contents() {
+        if let Some(contents) = &self.0.contents {
             let contents = contents.iter().map(Contents).collect::<Vec<_>>();
             s.serialize_field("", &contents)?;
         }
@@ -41,7 +41,7 @@ impl Serialize for ListBucketResult {
 
         s.serialize_field("MaxKeys", &self.0.max_keys())?;
 
-        if let Some(common_prefixes) = self.0.common_prefixes() {
+        if let Some(common_prefixes) = &self.0.common_prefixes {
             let common_prefixes = common_prefixes
                 .iter()
                 .map(CommonPrefixes)
@@ -102,7 +102,7 @@ impl Serialize for Contents<'_> {
             s.serialize_field("ETag", e_tag)?;
         }
 
-        if let Some(checksum_algorithms) = self.0.checksum_algorithm() {
+        if let Some(checksum_algorithms) = &self.0.checksum_algorithm {
             checksum_algorithms
                 .iter()
                 .try_for_each(|a| s.serialize_field("ChecksumAlgorithm", a.as_str()))?;

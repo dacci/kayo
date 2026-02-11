@@ -61,7 +61,7 @@ impl<W: io::Write> Serializer<W> {
     }
 }
 
-impl<'a, W: io::Write> serde::Serializer for &'a mut Serializer<W> {
+impl<W: io::Write> serde::Serializer for &mut Serializer<W> {
     type Ok = ();
     type Error = Error;
     type SerializeSeq = Self;

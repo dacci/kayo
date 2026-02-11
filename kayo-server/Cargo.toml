@@ -6,20 +6,20 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-anyhow = "1.0.75"
+anyhow = "1.0.101"
 aws-sdk-s3 = { version = "1.122.0", default-features = false }
 aws-smithy-types = "1.4.4"
 axum = "0.8.8"
-bytes = "1.5.0"
-clap = { version = "4.4.4", features = ["derive"] }
-futures = { version = "0.3.28", default-features = false, features = ["std"] }
-serde = { version = "1.0.188", features = ["derive"] }
-tokio = { version = "1.38.2", features = ["macros", "rt-multi-thread", "signal"] }
+bytes = "1.11.1"
+clap = { version = "4.5.57", features = ["derive"] }
+futures = { version = "0.3.31", default-features = false, features = ["std"] }
+serde = { version = "1.0.228", features = ["derive"] }
+tokio = { version = "1.49.0", features = ["macros", "rt-multi-thread", "signal"] }
 tower = "0.5.3"
 tower-http = { version = "0.6.8", features = ["cors", "fs"] }
-tracing = "0.1.37"
-tracing-subscriber = { version = "0.3.20", features = ["env-filter"] }
-xml-rs = "0.8.18"
+tracing = "0.1.44"
+tracing-subscriber = { version = "0.3.22", features = ["env-filter"] }
+xml-rs = "1.0.0"
 
 [profile.release]
 codegen-units = 1

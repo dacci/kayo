@@ -37,10 +37,9 @@ impl<T> IntoOption for Vec<T> {
 
 const BUCKET_NAME: &str = "contents";
 
-pub fn router<S, B>(root: PathBuf) -> axum::Router<S, B>
+pub fn router<S>(root: PathBuf) -> axum::Router<S>
 where
     S: Clone + Send + Sync + 'static,
-    B: axum::body::HttpBody + Send + 'static,
 {
     let serve_dir = ServeDir::new(&root);
     let handler = get(move |p, q| list_bucket(root, p, q));

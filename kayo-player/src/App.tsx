@@ -2,7 +2,7 @@ import {useMemo} from 'react';
 import {createHashRouter, Navigate, RouterProvider} from 'react-router-dom';
 import {AppBar, Box, createTheme, CssBaseline, ThemeProvider, useMediaQuery} from '@mui/material';
 import {ListObjectsV2Command, S3Client} from '@aws-sdk/client-s3';
-import {fromCognitoIdentityPool} from '@aws-sdk/credential-providers';
+import {fromCognitoIdentityPool} from '@aws-sdk/credential-provider-cognito-identity';
 import './App.css';
 import {CastControl, MediaChooser} from './component';
 import {CastProvider} from './context';

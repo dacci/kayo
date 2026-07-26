@@ -1,7 +1,7 @@
-import {useContext, useEffect, useState} from 'react';
-import {Divider, IconButton, Slider, Toolbar} from '@mui/material';
-import {Cast, CastConnected, FastForward, FastRewind, Pause, PlayArrow, Stop} from '@mui/icons-material';
-import {CastContext} from '../context';
+import { Cast, CastConnected, FastForward, FastRewind, Pause, PlayArrow, Stop } from '@mui/icons-material';
+import { Divider, IconButton, Slider, Toolbar } from '@mui/material';
+import { useContext, useEffect, useState } from 'react';
+import { CastContext } from '../context';
 
 function CastControl() {
   const {
@@ -76,39 +76,39 @@ function CastControl() {
         edge='start'
         onClick={() => window.cast.framework.CastContext.getInstance().requestSession()}
       >
-        {connected ? <CastConnected/> : <Cast/>}
+        {connected ? <CastConnected /> : <Cast />}
       </IconButton>
       <Divider
         orientation='vertical'
-        sx={{mx: 1}}
+        sx={{ mx: 1 }}
       />
       <IconButton
         disabled={!mediaLoaded || !canPause}
         onClick={() => playerController?.playOrPause()}
       >
-        {!mediaLoaded || paused ? <PlayArrow/> : <Pause/>}
+        {!mediaLoaded || paused ? <PlayArrow /> : <Pause />}
       </IconButton>
       <IconButton
         disabled={!mediaLoaded}
         onClick={() => playerController?.stop()}
       >
-        <Stop/>
+        <Stop />
       </IconButton>
       <IconButton
         disabled={!canSeek}
         onClick={() => seekTo(currentTime - 10)}
       >
-        <FastRewind/>
+        <FastRewind />
       </IconButton>
       <IconButton
         disabled={!canSeek}
         onClick={() => seekTo(currentTime + 10)}
       >
-        <FastForward/>
+        <FastForward />
       </IconButton>
       <Divider
         orientation='vertical'
-        sx={{mx: 1}}
+        sx={{ mx: 1 }}
       />
       <Slider
         disabled={!canSeek}

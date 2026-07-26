@@ -1,16 +1,16 @@
-import {useMemo} from 'react';
-import {createHashRouter, Navigate, RouterProvider} from 'react-router-dom';
-import {AppBar, Box, createTheme, CssBaseline, ThemeProvider, useMediaQuery} from '@mui/material';
-import {ListObjectsV2Command, S3Client} from '@aws-sdk/client-s3';
-import {fromCognitoIdentityPool} from '@aws-sdk/credential-provider-cognito-identity';
+import { ListObjectsV2Command, S3Client } from '@aws-sdk/client-s3';
+import { fromCognitoIdentityPool } from '@aws-sdk/credential-provider-cognito-identity';
+import { AppBar, Box, createTheme, CssBaseline, ThemeProvider, useMediaQuery } from '@mui/material';
+import { useMemo } from 'react';
+import { createHashRouter, Navigate, RouterProvider } from 'react-router-dom';
 import './App.css';
-import {CastControl, MediaChooser} from './component';
-import {CastProvider} from './context';
+import { CastControl, MediaChooser } from './component';
+import { CastProvider } from './context';
 
 const BUCKET = import.meta.env.VITE_APP_BUCKET || 'contents';
 
 function App() {
-  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)', {noSsr: true});
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)', { noSsr: true });
   const theme = useMemo(() => createTheme({
     palette: {
       mode: prefersDarkMode ? 'dark' : 'light',
@@ -24,7 +24,7 @@ function App() {
         region,
         credentials: fromCognitoIdentityPool({
           identityPoolId: import.meta.env.VITE_APP_IDENTITY_POOL_ID,
-          clientConfig: {region},
+          clientConfig: { region },
         }),
       });
     } else {
@@ -48,11 +48,11 @@ function App() {
   const router = createHashRouter([
     {
       path: '/',
-      element: <Navigate to='/contents' replace/>,
+      element: <Navigate to='/contents' replace />,
     },
     {
       path: '/contents/*',
-      loader: async ({params}) => s3.send(new ListObjectsV2Command({
+      loader: async ({ params }) => s3.send(new ListObjectsV2Command({
         Bucket: BUCKET,
         Prefix: params['*'] as string,
         Delimiter: '/',
@@ -66,12 +66,12 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline/>
+      <CssBaseline />
       <CastProvider receiverApplicationId='5C78621A'>
         <Box className='App'>
-          <RouterProvider router={router}/>
-          <AppBar position='fixed' sx={{top: 'auto', bottom: 0}}>
-            <CastControl/>
+          <RouterProvider router={router} />
+          <AppBar position='fixed' sx={{ top: 'auto', bottom: 0 }}>
+            <CastControl />
           </AppBar>
         </Box>
       </CastProvider>

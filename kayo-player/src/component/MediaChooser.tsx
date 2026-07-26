@@ -1,8 +1,8 @@
-import {Link, ScrollRestoration, useLoaderData} from 'react-router-dom';
-import {List, ListItem, ListItemButton, ListItemIcon, ListItemText} from '@mui/material';
-import {Description, Folder} from '@mui/icons-material';
-import {GetObjectCommand, type ListObjectsV2CommandOutput, S3Client} from '@aws-sdk/client-s3';
-import {getSignedUrl} from '@aws-sdk/s3-request-presigner';
+import { GetObjectCommand, type ListObjectsV2CommandOutput, S3Client } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { Description, Folder } from '@mui/icons-material';
+import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material';
+import { Link, ScrollRestoration, useLoaderData } from 'react-router-dom';
 
 const basename = (path: string) => path.split('/').reverse().find(s => s.length);
 
@@ -11,7 +11,7 @@ interface MediaChooserProps {
   readonly bucket: string;
 }
 
-function MediaChooser({s3Client, bucket}: MediaChooserProps) {
+function MediaChooser({ s3Client, bucket }: MediaChooserProps) {
   const res = useLoaderData() as ListObjectsV2CommandOutput;
 
   const play = async (path: string) =>
@@ -31,12 +31,12 @@ function MediaChooser({s3Client, bucket}: MediaChooserProps) {
 
   return (
     <>
-      <ScrollRestoration/>
+      <ScrollRestoration />
       <List>
         {res.CommonPrefixes?.map((p, i) => (
           <ListItem key={i}>
             <ListItemButton component={Link} to={encodeURIComponent(basename(p.Prefix!)!)} relative='path'>
-              <ListItemIcon><Folder/></ListItemIcon>
+              <ListItemIcon><Folder /></ListItemIcon>
               <ListItemText>{basename(p.Prefix!)}</ListItemText>
             </ListItemButton>
           </ListItem>
@@ -44,7 +44,7 @@ function MediaChooser({s3Client, bucket}: MediaChooserProps) {
         {res.Contents?.map((o, i) => (
           <ListItem key={i}>
             <ListItemButton onClick={() => play(o.Key!)}>
-              <ListItemIcon><Description/></ListItemIcon>
+              <ListItemIcon><Description /></ListItemIcon>
               <ListItemText>{basename(o.Key!)}</ListItemText>
             </ListItemButton>
           </ListItem>

@@ -37,7 +37,7 @@ function MediaChooser({ s3Client, bucket }: MediaChooserProps) {
     }), {
       expiresIn: 86400,
     }).then(url => {
-      const session = window.cast.framework.CastContext
+      const session = window.cast?.framework.CastContext
         .getInstance()
         .getCurrentSession();
       if (session) {

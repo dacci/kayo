@@ -1,5 +1,5 @@
-import { useRef, useState } from 'react';
-import { Link, ScrollRestoration, useLoaderData } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import { Link, ScrollRestoration, useLoaderData, useLocation } from 'react-router-dom';
 
 import { GetObjectCommand, type ListObjectsV2CommandOutput, S3Client } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
@@ -70,6 +70,9 @@ function MediaChooser({ s3Client, bucket }: MediaChooserProps) {
     setTitle('');
     setShowPlayer(false);
   };
+
+  const path = useLocation();
+  useEffect(() => handleClose, [path]);
 
   return (
     <>

@@ -1,6 +1,17 @@
-import { Cast, CastConnected, FastForward, FastRewind, Pause, PlayArrow, Stop } from '@mui/icons-material';
-import { Divider, IconButton, Slider, Toolbar } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
+
+import CastIcon from '@mui/icons-material/Cast';
+import CastConnectedIcon from '@mui/icons-material/CastConnected';
+import FastForwardIcon from '@mui/icons-material/FastForward';
+import FastRewindIcon from '@mui/icons-material/FastRewind';
+import PauseIcon from '@mui/icons-material/Pause';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import StopIcon from '@mui/icons-material/Stop';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import Slider from '@mui/material/Slider';
+import Toolbar from '@mui/material/Toolbar';
+
 import { CastContext } from '../context';
 
 function CastControl() {
@@ -76,7 +87,7 @@ function CastControl() {
         edge='start'
         onClick={() => window.cast.framework.CastContext.getInstance().requestSession()}
       >
-        {connected ? <CastConnected /> : <Cast />}
+        {connected ? <CastConnectedIcon /> : <CastIcon />}
       </IconButton>
       <Divider
         orientation='vertical'
@@ -86,25 +97,25 @@ function CastControl() {
         disabled={!mediaLoaded || !canPause}
         onClick={() => playerController?.playOrPause()}
       >
-        {!mediaLoaded || paused ? <PlayArrow /> : <Pause />}
+        {!mediaLoaded || paused ? <PlayArrowIcon /> : <PauseIcon />}
       </IconButton>
       <IconButton
         disabled={!mediaLoaded}
         onClick={() => playerController?.stop()}
       >
-        <Stop />
+        <StopIcon />
       </IconButton>
       <IconButton
         disabled={!canSeek}
         onClick={() => seekTo(currentTime - 10)}
       >
-        <FastRewind />
+        <FastRewindIcon />
       </IconButton>
       <IconButton
         disabled={!canSeek}
         onClick={() => seekTo(currentTime + 10)}
       >
-        <FastForward />
+        <FastForwardIcon />
       </IconButton>
       <Divider
         orientation='vertical'

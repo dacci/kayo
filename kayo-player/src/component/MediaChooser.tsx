@@ -125,6 +125,7 @@ function MediaChooser({ s3Client, bucket }: MediaChooserProps) {
           autoPlay
           controls
           style={{ width: '100%', height: '100%' }}
+          onLoadStart={(e) => (e.target as HTMLVideoElement).focus()}
         >
           <source src={source} />
         </video>

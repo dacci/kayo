@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Link, ScrollRestoration, useLoaderData } from 'react-router-dom';
 
 import { GetObjectCommand, type ListObjectsV2CommandOutput, S3Client } from '@aws-sdk/client-s3';
@@ -6,17 +6,18 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import CloseIcon from '@mui/icons-material/Close';
 import DescriptionIcon from '@mui/icons-material/Description';
 import FolderIcon from '@mui/icons-material/Folder';
+import AppBar from '@mui/material/AppBar';
 import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
 
-const basename = (path: string) => path.split('/').reverse().find(s => s.length);
+const basename = (path: string) => path.split('/').reverse().find(s => s.length)!;
 
 interface MediaChooserProps {
   readonly s3Client: S3Client;
@@ -24,6 +25,18 @@ interface MediaChooserProps {
 }
 
 function MediaChooser({ s3Client, bucket }: MediaChooserProps) {
+  const [visible, setVisible] = useState(true);
+  const timeoutRef = useRef(0);
+  const resetTimer = () => {
+    setVisible(true);
+
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    timeoutRef.current = setTimeout(() => setVisible(false), 2500);
+  };
+
   const res = useLoaderData() as ListObjectsV2CommandOutput;
 
   const [showPlayer, setShowPlayer] = useState(false);
@@ -45,6 +58,7 @@ function MediaChooser({ s3Client, bucket }: MediaChooserProps) {
         const request = new window.chrome.cast.media.LoadRequest(media);
         return session.loadMedia(request);
       } else {
+        resetTimer();
         setSource(url);
         setTitle(title);
         setShowPlayer(true);
@@ -63,7 +77,7 @@ function MediaChooser({ s3Client, bucket }: MediaChooserProps) {
       <List>
         {res.CommonPrefixes?.map((p, i) => (
           <ListItem key={i}>
-            <ListItemButton component={Link} to={encodeURIComponent(basename(p.Prefix!)!)} relative='path'>
+            <ListItemButton component={Link} to={encodeURIComponent(basename(p.Prefix!))} relative='path'>
               <ListItemIcon><FolderIcon /></ListItemIcon>
               <ListItemText>{basename(p.Prefix!)}</ListItemText>
             </ListItemButton>
@@ -71,33 +85,47 @@ function MediaChooser({ s3Client, bucket }: MediaChooserProps) {
         ))}
         {res.Contents?.map((o, i) => (
           <ListItem key={i}>
-            <ListItemButton onClick={() => play(o.Key!, basename(o.Key!)!)}>
+            <ListItemButton onClick={() => play(o.Key!, basename(o.Key!))}>
               <ListItemIcon><DescriptionIcon /></ListItemIcon>
               <ListItemText>{basename(o.Key!)}</ListItemText>
             </ListItemButton>
           </ListItem>
         ))}
       </List>
-      <Dialog fullScreen open={showPlayer}>
-        <DialogTitle>{title}</DialogTitle>
-        <IconButton
-          aria-label='close'
-          sx={(theme) => ({
-            position: 'absolute',
-            right: 8,
-            top: 8,
-            color: theme.palette.grey[500],
-          })}
-          onClick={handleClose}
+      <Dialog
+        fullScreen
+        open={showPlayer}
+        onMouseMove={() => resetTimer()}
+      >
+        <AppBar
+          color='transparent'
+          elevation={0}
+          sx={{
+            opacity: visible ? 1 : 0,
+            transition: 'opacity 0.3s ease-out',
+          }}>
+          <Toolbar>
+            <Typography sx={{ ml: 2, flex: 1 }} variant='h6' component='div'>
+              {title}
+            </Typography>
+            <IconButton
+              edge='end'
+              color='inherit'
+              aria-label='close'
+              onClick={handleClose}
+            >
+              <CloseIcon />
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+        <video
+          autoPlay
+          controls
+          style={{ width: '100%', height: '100%' }}
         >
-          <CloseIcon />
-        </IconButton>
-        <DialogContent sx={{ overflow: 'hidden' }}>
-          <video autoPlay controls style={{ width: '100%', height: '100%' }}>
-            <source src={source} />
-          </video>
-        </DialogContent>
-      </Dialog>
+          <source src={source} />
+        </video>
+      </Dialog >
     </>
   );
 }

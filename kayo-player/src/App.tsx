@@ -3,13 +3,10 @@ import { createHashRouter, Navigate, RouterProvider } from 'react-router-dom';
 
 import { ListObjectsV2Command, S3Client } from '@aws-sdk/client-s3';
 import { fromCognitoIdentityPool } from '@aws-sdk/credential-provider-cognito-identity';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
-import './App.css';
 import { CastControl, MediaChooser } from './component';
 import { CastProvider } from './context';
 
@@ -74,12 +71,8 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <CastProvider receiverApplicationId='5C78621A'>
-        <Box className='App'>
-          <RouterProvider router={router} />
-          <AppBar position='fixed' sx={{ top: 'auto', bottom: 0 }}>
-            <CastControl />
-          </AppBar>
-        </Box>
+        <RouterProvider router={router} />
+        <CastControl />
       </CastProvider>
     </ThemeProvider>
   );

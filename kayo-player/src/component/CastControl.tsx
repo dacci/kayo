@@ -7,6 +7,7 @@ import FastRewindIcon from '@mui/icons-material/FastRewind';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import StopIcon from '@mui/icons-material/Stop';
+import AppBar from '@mui/material/AppBar';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Slider from '@mui/material/Slider';
@@ -79,64 +80,65 @@ function CastControl() {
       ?.seek(request, resolve as () => void, reject);
   });
 
-  return (
-    <Toolbar>
-      <IconButton
-        disabled={!available}
-        size='large'
-        edge='start'
-        onClick={() => window.cast.framework.CastContext.getInstance().requestSession()}
-      >
-        {connected ? <CastConnectedIcon /> : <CastIcon />}
-      </IconButton>
-      <Divider
-        orientation='vertical'
-        sx={{ mx: 1 }}
-      />
-      <IconButton
-        disabled={!mediaLoaded || !canPause}
-        onClick={() => playerController?.playOrPause()}
-      >
-        {!mediaLoaded || paused ? <PlayArrowIcon /> : <PauseIcon />}
-      </IconButton>
-      <IconButton
-        disabled={!mediaLoaded}
-        onClick={() => playerController?.stop()}
-      >
-        <StopIcon />
-      </IconButton>
-      <IconButton
-        disabled={!canSeek}
-        onClick={() => seekTo(currentTime - 10)}
-      >
-        <FastRewindIcon />
-      </IconButton>
-      <IconButton
-        disabled={!canSeek}
-        onClick={() => seekTo(currentTime + 10)}
-      >
-        <FastForwardIcon />
-      </IconButton>
-      <Divider
-        orientation='vertical'
-        sx={{ mx: 1 }}
-      />
-      <Slider
-        disabled={!canSeek}
-        max={duration}
-        value={currentTime}
-        valueLabelDisplay='auto'
-        valueLabelFormat={(value) => playerController?.getFormattedTime(value)}
-        onChange={(_, value) => {
-          setDragging(true);
-          setCurrentTime(value as number);
-        }}
-        onChangeCommitted={(_, value) => {
-          setDragging(false);
-          return seekTo(value as number);
-        }}
-      />
-    </Toolbar>
+  return available&&(
+    <AppBar position='fixed' sx={{ top: 'auto', bottom: 0 }}>
+      <Toolbar>
+        <IconButton
+          size='large'
+          edge='start'
+          onClick={() => window.cast.framework.CastContext.getInstance().requestSession()}
+        >
+          {connected ? <CastConnectedIcon /> : <CastIcon />}
+        </IconButton>
+        <Divider
+          orientation='vertical'
+          sx={{ mx: 1 }}
+        />
+        <IconButton
+          disabled={!mediaLoaded || !canPause}
+          onClick={() => playerController?.playOrPause()}
+        >
+          {!mediaLoaded || paused ? <PlayArrowIcon /> : <PauseIcon />}
+        </IconButton>
+        <IconButton
+          disabled={!mediaLoaded}
+          onClick={() => playerController?.stop()}
+        >
+          <StopIcon />
+        </IconButton>
+        <IconButton
+          disabled={!canSeek}
+          onClick={() => seekTo(currentTime - 10)}
+        >
+          <FastRewindIcon />
+        </IconButton>
+        <IconButton
+          disabled={!canSeek}
+          onClick={() => seekTo(currentTime + 10)}
+        >
+          <FastForwardIcon />
+        </IconButton>
+        <Divider
+          orientation='vertical'
+          sx={{ mx: 1 }}
+        />
+        <Slider
+          disabled={!canSeek}
+          max={duration}
+          value={currentTime}
+          valueLabelDisplay='auto'
+          valueLabelFormat={(value) => playerController?.getFormattedTime(value)}
+          onChange={(_, value) => {
+            setDragging(true);
+            setCurrentTime(value as number);
+          }}
+          onChangeCommitted={(_, value) => {
+            setDragging(false);
+            return seekTo(value as number);
+          }}
+        />
+      </Toolbar>
+    </AppBar>
   );
 }
 

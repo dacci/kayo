@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { Link, ScrollRestoration, useLoaderData, useLocation } from 'react-router-dom';
 
 import { GetObjectCommand, type ListObjectsV2CommandOutput, S3Client } from '@aws-sdk/client-s3';
@@ -7,6 +7,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import DescriptionIcon from '@mui/icons-material/Description';
 import FolderIcon from '@mui/icons-material/Folder';
 import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
 import Dialog from '@mui/material/Dialog';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
@@ -16,6 +17,9 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+
+import { CastContext } from '../context';
+import style from './MediaChooser.module.css';
 
 const basename = (path: string) => path.split('/').reverse().find(s => s.length)!;
 
@@ -74,8 +78,10 @@ function MediaChooser({ s3Client, bucket }: MediaChooserProps) {
   const path = useLocation();
   useEffect(() => handleClose, [path]);
 
+  const { available } = useContext(CastContext);
+
   return (
-    <>
+    <Box className={available ? style.cast : undefined}>
       <ScrollRestoration />
       <List>
         {res.CommonPrefixes?.map((p, i) => (
@@ -99,6 +105,7 @@ function MediaChooser({ s3Client, bucket }: MediaChooserProps) {
         fullScreen
         open={showPlayer}
         onMouseMove={() => resetTimer()}
+        onTouchStart={() => resetTimer()}
       >
         <AppBar
           color='transparent'
@@ -130,7 +137,7 @@ function MediaChooser({ s3Client, bucket }: MediaChooserProps) {
           <source src={source} />
         </video>
       </Dialog >
-    </>
+    </Box>
   );
 }
 

@@ -1,13 +1,13 @@
 import { type ReactNode, useEffect, useMemo, useState } from 'react';
 
-import CastContext from './CastContext';
+import CastContext, { type CastContextProps } from './CastContext';
 
 interface CastProviderProps {
   readonly children?: ReactNode | ReactNode[];
   readonly receiverApplicationId?: string;
 }
 
-function CastProvider({children, receiverApplicationId}: CastProviderProps) {
+function CastProvider({ children, receiverApplicationId }: CastProviderProps) {
   const [available, setAvailable] = useState(false);
   const [player, setPlayer] = useState<cast.framework.RemotePlayer>();
   const [playerController, setPlayerController] = useState<cast.framework.RemotePlayerController>();
@@ -19,7 +19,7 @@ function CastProvider({children, receiverApplicationId}: CastProviderProps) {
   }, []);
 
   useEffect(() => {
-    if (!(window.cast && window.chrome.cast && window.cast)) return;
+    if (!(window.cast && window.chrome.cast)) return;
 
     const castContext = window.cast.framework.CastContext.getInstance();
     castContext.setOptions({
@@ -32,7 +32,7 @@ function CastProvider({children, receiverApplicationId}: CastProviderProps) {
     setPlayerController(new window.cast.framework.RemotePlayerController(player));
   }, [receiverApplicationId, available]);
 
-  const value = useMemo(() => ({
+  const value = useMemo<CastContextProps>(() => ({
     available,
     player,
     playerController,

@@ -19,7 +19,6 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 
 import { CastContext } from '../context';
-import style from './MediaChooser.module.css';
 
 const basename = (path: string) => path.split('/').reverse().find(s => s.length)!;
 
@@ -81,7 +80,14 @@ function MediaChooser({ s3Client, bucket }: MediaChooserProps) {
   const { available } = useContext(CastContext);
 
   return (
-    <Box className={available ? style.cast : undefined}>
+    <Box
+      sx={available ? {
+        pb: { xs: 7, sm: 8 },
+        '@media (orientation: landscape)': {
+          pb: { xs: 6, sm: 8 },
+        }
+      } : undefined}
+    >
       <ScrollRestoration />
       <List>
         {res.CommonPrefixes?.map((p, i) => (

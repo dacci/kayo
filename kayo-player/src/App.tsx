@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { createHashRouter, Navigate, RouterProvider } from 'react-router-dom';
+import { createHashRouter, Navigate, RouterProvider } from 'react-router';
 
 import { ListObjectsV2Command, S3Client } from '@aws-sdk/client-s3';
 import { fromCognitoIdentityPool } from '@aws-sdk/credential-provider-cognito-identity';

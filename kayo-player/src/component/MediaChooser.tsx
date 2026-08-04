@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from 'react';
-import { Link, ScrollRestoration, useLoaderData, useLocation } from 'react-router-dom';
+import { Link, ScrollRestoration, useLoaderData, useLocation } from 'react-router';
 
 import { GetObjectCommand, type ListObjectsV2CommandOutput, S3Client } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';

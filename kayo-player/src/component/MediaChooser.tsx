@@ -52,7 +52,7 @@ function MediaChooser({ s3Client, bucket }: MediaChooserProps) {
       Key: path,
     }), {
       expiresIn: 86400,
-    }).then(url => {
+    }).then((url) => {
       const session = window.cast?.framework.CastContext
         .getInstance()
         .getCurrentSession();
@@ -81,18 +81,20 @@ function MediaChooser({ s3Client, bucket }: MediaChooserProps) {
 
   return (
     <Box
-      sx={available ? {
-        pb: { xs: 7, sm: 8 },
-        '@media (orientation: landscape)': {
-          pb: { xs: 6, sm: 8 },
-        }
-      } : undefined}
+      sx={available
+        ? {
+            'pb': { xs: 7, sm: 8 },
+            '@media (orientation: landscape)': {
+              pb: { xs: 6, sm: 8 },
+            },
+          }
+        : undefined}
     >
       <ScrollRestoration />
       <List>
         {res.CommonPrefixes?.map((p, i) => (
           <ListItem key={i}>
-            <ListItemButton component={Link} to={encodeURIComponent(basename(p.Prefix!))} relative='path'>
+            <ListItemButton component={Link} to={encodeURIComponent(basename(p.Prefix!))} relative="path">
               <ListItemIcon><FolderIcon /></ListItemIcon>
               <ListItemText>{basename(p.Prefix!)}</ListItemText>
             </ListItemButton>
@@ -114,20 +116,21 @@ function MediaChooser({ s3Client, bucket }: MediaChooserProps) {
         onTouchStart={() => resetTimer()}
       >
         <AppBar
-          color='transparent'
+          color="transparent"
           elevation={0}
           sx={{
             opacity: visible ? 1 : 0,
             transition: 'opacity 0.3s ease-out',
-          }}>
+          }}
+        >
           <Toolbar>
-            <Typography sx={{ ml: 2, flex: 1 }} variant='h6' component='div'>
+            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
               {title}
             </Typography>
             <IconButton
-              edge='end'
-              color='inherit'
-              aria-label='close'
+              edge="end"
+              color="inherit"
+              aria-label="close"
               onClick={handleClose}
             >
               <CloseIcon />
@@ -138,11 +141,11 @@ function MediaChooser({ s3Client, bucket }: MediaChooserProps) {
           autoPlay
           controls
           style={{ width: '100%', height: '100%' }}
-          onLoadStart={(e) => (e.target as HTMLVideoElement).focus()}
+          onLoadStart={e => (e.target as HTMLVideoElement).focus()}
         >
           <source src={source} />
         </video>
-      </Dialog >
+      </Dialog>
     </Box>
   );
 }

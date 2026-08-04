@@ -42,7 +42,7 @@ function App() {
         signer: {
           async sign(requestToSign) {
             return requestToSign;
-          }
+          },
         },
       });
     }
@@ -51,7 +51,7 @@ function App() {
   const router = createHashRouter([
     {
       path: '/',
-      element: <Navigate to='/contents' replace />,
+      element: <Navigate to="/contents" replace />,
     },
     {
       path: '/contents/*',
@@ -60,17 +60,19 @@ function App() {
         Prefix: params['*'] as string,
         Delimiter: '/',
       })),
-      element: <MediaChooser
-        s3Client={s3}
-        bucket={BUCKET}
-      />,
+      element: (
+        <MediaChooser
+          s3Client={s3}
+          bucket={BUCKET}
+        />
+      ),
     },
   ]);
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <CastProvider receiverApplicationId='5C78621A'>
+      <CastProvider receiverApplicationId="5C78621A">
         <RouterProvider router={router} />
         <CastControl />
       </CastProvider>

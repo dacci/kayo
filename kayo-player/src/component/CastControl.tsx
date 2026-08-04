@@ -80,18 +80,18 @@ function CastControl() {
       ?.seek(request, resolve as () => void, reject);
   });
 
-  return available&&(
-    <AppBar position='fixed' sx={{ top: 'auto', bottom: 0 }}>
+  return available && (
+    <AppBar position="fixed" sx={{ top: 'auto', bottom: 0 }}>
       <Toolbar>
         <IconButton
-          size='large'
-          edge='start'
+          size="large"
+          edge="start"
           onClick={() => window.cast.framework.CastContext.getInstance().requestSession()}
         >
           {connected ? <CastConnectedIcon /> : <CastIcon />}
         </IconButton>
         <Divider
-          orientation='vertical'
+          orientation="vertical"
           sx={{ mx: 1 }}
         />
         <IconButton
@@ -119,15 +119,15 @@ function CastControl() {
           <FastForwardIcon />
         </IconButton>
         <Divider
-          orientation='vertical'
+          orientation="vertical"
           sx={{ mx: 1 }}
         />
         <Slider
           disabled={!canSeek}
           max={duration}
           value={currentTime}
-          valueLabelDisplay='auto'
-          valueLabelFormat={(value) => playerController?.getFormattedTime(value)}
+          valueLabelDisplay="auto"
+          valueLabelFormat={value => playerController?.getFormattedTime(value)}
           onChange={(_, value) => {
             setDragging(true);
             setCurrentTime(value as number);

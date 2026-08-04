@@ -38,7 +38,7 @@ function CastProvider({ children, receiverApplicationId }: CastProviderProps) {
     playerController,
   }), [available, player, playerController]);
 
-  return <CastContext.Provider value={value}>{children}</CastContext.Provider>
+  return <CastContext.Provider value={value}>{children}</CastContext.Provider>;
 }
 
 export default CastProvider;

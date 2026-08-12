@@ -9,8 +9,6 @@ interface CastProviderProps {
 
 function CastProvider({ children, receiverApplicationId }: CastProviderProps) {
   const [available, setAvailable] = useState(false);
-  const [player, setPlayer] = useState<cast.framework.RemotePlayer>();
-  const [playerController, setPlayerController] = useState<cast.framework.RemotePlayerController>();
 
   useEffect(() => {
     window['__onGCastApiAvailable'] = (available) => {
@@ -18,25 +16,25 @@ function CastProvider({ children, receiverApplicationId }: CastProviderProps) {
     };
   }, []);
 
-  useEffect(() => {
-    if (!(window.cast && window.chrome.cast)) return;
+  const value = useMemo<CastContextProps>(() => {
+    let player, playerController;
+    if (available) {
+      const castContext = window.cast.framework.CastContext.getInstance();
+      castContext.setOptions({
+        receiverApplicationId: receiverApplicationId || window.chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID,
+        autoJoinPolicy: window.chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED,
+      });
 
-    const castContext = window.cast.framework.CastContext.getInstance();
-    castContext.setOptions({
-      receiverApplicationId: receiverApplicationId || window.chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID,
-      autoJoinPolicy: window.chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED,
-    });
+      player = new window.cast.framework.RemotePlayer();
+      playerController = new window.cast.framework.RemotePlayerController(player);
+    }
 
-    const player = new window.cast.framework.RemotePlayer();
-    setPlayer(player);
-    setPlayerController(new window.cast.framework.RemotePlayerController(player));
+    return {
+      available,
+      player,
+      playerController,
+    };
   }, [receiverApplicationId, available]);
-
-  const value = useMemo<CastContextProps>(() => ({
-    available,
-    player,
-    playerController,
-  }), [available, player, playerController]);
 
   return <CastContext.Provider value={value}>{children}</CastContext.Provider>;
 }

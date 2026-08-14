@@ -1,8 +1,4 @@
-import { useContext, useEffect, useRef, useState } from 'react';
-import { Link, ScrollRestoration, useLoaderData, useLocation } from 'react-router';
-
-import { GetObjectCommand, type ListObjectsV2CommandOutput, S3Client } from '@aws-sdk/client-s3';
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { type ListObjectsV2CommandOutput } from '@aws-sdk/client-s3';
 import CloseIcon from '@mui/icons-material/Close';
 import DescriptionIcon from '@mui/icons-material/Description';
 import FolderIcon from '@mui/icons-material/Folder';
@@ -17,17 +13,15 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
+import { useContext, useEffect, useRef, useState } from 'react';
+import { Link, ScrollRestoration, useLoaderData, useLocation } from 'react-router';
+import { getMediaUrl } from '../api';
 
-import { CastContext } from '../context';
+import CastContext from '../context/CastContext';
 
 const basename = (path: string) => path.split('/').reverse().find(s => s.length)!;
 
-interface MediaChooserProps {
-  readonly s3Client: S3Client;
-  readonly bucket: string;
-}
-
-function MediaChooser({ s3Client, bucket }: MediaChooserProps) {
+function MediaChooser() {
   const [visible, setVisible] = useState(true);
   const timeoutRef = useRef(0);
   const resetTimer = () => {
@@ -46,27 +40,24 @@ function MediaChooser({ s3Client, bucket }: MediaChooserProps) {
   const [source, setSource] = useState<string | undefined>();
   const [title, setTitle] = useState<string | undefined>();
 
-  const play = async (path: string, title: string) =>
-    await getSignedUrl(s3Client, new GetObjectCommand({
-      Bucket: bucket,
-      Key: path,
-    }), {
-      expiresIn: 86400,
-    }).then((url) => {
-      const session = window.cast?.framework.CastContext
-        .getInstance()
-        .getCurrentSession();
-      if (session) {
-        const media = new window.chrome.cast.media.MediaInfo(url, '');
-        const request = new window.chrome.cast.media.LoadRequest(media);
-        return session.loadMedia(request);
-      } else {
-        resetTimer();
-        setSource(url);
-        setTitle(title);
-        setShowPlayer(true);
-      }
-    }).catch(console.error);
+  const play = (path: string, title: string) =>
+    getMediaUrl(path)
+      .then((url) => {
+        const session = window.cast?.framework.CastContext
+          .getInstance()
+          .getCurrentSession();
+        if (session) {
+          const media = new window.chrome.cast.media.MediaInfo(url, '');
+          const request = new window.chrome.cast.media.LoadRequest(media);
+          return session.loadMedia(request);
+        } else {
+          resetTimer();
+          setSource(url);
+          setTitle(title);
+          setShowPlayer(true);
+        }
+      })
+      .catch(console.error);
 
   const handleClose = () => {
     setSource(undefined);

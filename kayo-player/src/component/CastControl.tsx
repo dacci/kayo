@@ -1,5 +1,3 @@
-import { useContext, useEffect, useState } from 'react';
-
 import CastIcon from '@mui/icons-material/Cast';
 import CastConnectedIcon from '@mui/icons-material/CastConnected';
 import FastForwardIcon from '@mui/icons-material/FastForward';
@@ -12,8 +10,9 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Slider from '@mui/material/Slider';
 import Toolbar from '@mui/material/Toolbar';
+import { useContext, useEffect, useState } from 'react';
 
-import { CastContext } from '../context';
+import CastContext from '../context/CastContext';
 
 function CastControl() {
   const {

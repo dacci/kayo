@@ -5,15 +5,14 @@ import { useMemo } from 'react';
 import { createHashRouter, RouterProvider } from 'react-router';
 
 import { listObjects } from './api';
-import CastControl from './component/CastControl';
-import MediaChooser from './component/MediaChooser';
+import AppContent from './component/AppContent';
 import CastProvider from './context/CastProvider';
 
 const router = createHashRouter([
   {
     path: '*',
     loader: ({ params }) => listObjects(params['*']),
-    Component: MediaChooser,
+    Component: AppContent,
   },
 ]);
 
@@ -30,7 +29,6 @@ function App() {
       <CssBaseline />
       <CastProvider receiverApplicationId="5C78621A">
         <RouterProvider router={router} />
-        <CastControl />
       </CastProvider>
     </ThemeProvider>
   );

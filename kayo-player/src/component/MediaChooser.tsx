@@ -1,85 +1,35 @@
-import { type ListObjectsV2CommandOutput } from '@aws-sdk/client-s3';
-import CloseIcon from '@mui/icons-material/Close';
+import { type _Object, type ListObjectsV2CommandOutput } from '@aws-sdk/client-s3';
 import DescriptionIcon from '@mui/icons-material/Description';
 import FolderIcon from '@mui/icons-material/Folder';
-import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import Dialog from '@mui/material/Dialog';
-import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import { useContext, useEffect, useRef, useState } from 'react';
-import { Link, ScrollRestoration, useLoaderData, useLocation } from 'react-router';
-import { getMediaUrl } from '../api';
-
-import CastContext from '../context/CastContext';
+import { Link, ScrollRestoration, useLoaderData } from 'react-router';
 
 const basename = (path: string) => path.split('/').reverse().find(s => s.length)!;
 
-function MediaChooser() {
-  const [visible, setVisible] = useState(true);
-  const timeoutRef = useRef(0);
-  const resetTimer = () => {
-    setVisible(true);
+export interface MediaChooserProps {
+  readonly onMediaSelected?: (path: string, title: string) => void;
+}
 
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-
-    timeoutRef.current = setTimeout(() => setVisible(false), 2500);
-  };
-
+function MediaChooser(props: MediaChooserProps) {
   const res = useLoaderData() as ListObjectsV2CommandOutput;
 
-  const [showPlayer, setShowPlayer] = useState(false);
-  const [source, setSource] = useState<string | undefined>();
-  const [title, setTitle] = useState<string | undefined>();
-
-  const play = (path: string, title: string) =>
-    getMediaUrl(path)
-      .then((url) => {
-        const session = window.cast?.framework.CastContext
-          .getInstance()
-          .getCurrentSession();
-        if (session) {
-          const media = new window.chrome.cast.media.MediaInfo(url, '');
-          const request = new window.chrome.cast.media.LoadRequest(media);
-          return session.loadMedia(request);
-        } else {
-          resetTimer();
-          setSource(url);
-          setTitle(title);
-          setShowPlayer(true);
-        }
-      })
-      .catch(console.error);
-
-  const handleClose = () => {
-    setSource(undefined);
-    setTitle('');
-    setShowPlayer(false);
+  const onMediaSelected = (o: _Object) => {
+    if (props.onMediaSelected) {
+      props.onMediaSelected(o.Key!, basename(o.Key!));
+    }
   };
-
-  const path = useLocation();
-  useEffect(() => handleClose, [path]);
-
-  const { available } = useContext(CastContext);
 
   return (
     <Box
-      sx={available
-        ? {
-            'pb': { xs: 7, sm: 8 },
-            '@media (orientation: landscape)': {
-              pb: { xs: 6, sm: 8 },
-            },
-          }
-        : undefined}
+      sx={{
+        'mt': { xs: 7, sm: 8 },
+        '@media (orientation: landscape)': { mt: { xs: 6, sm: 8 } },
+      }}
     >
       <ScrollRestoration />
       <List>
@@ -93,50 +43,13 @@ function MediaChooser() {
         ))}
         {res.Contents?.map((o, i) => (
           <ListItem key={i}>
-            <ListItemButton onClick={() => play(o.Key!, basename(o.Key!))}>
+            <ListItemButton onClick={() => onMediaSelected(o)}>
               <ListItemIcon><DescriptionIcon /></ListItemIcon>
               <ListItemText>{basename(o.Key!)}</ListItemText>
             </ListItemButton>
           </ListItem>
         ))}
       </List>
-      <Dialog
-        fullScreen
-        open={showPlayer}
-        onMouseMove={() => resetTimer()}
-        onTouchStart={() => resetTimer()}
-      >
-        <AppBar
-          color="transparent"
-          elevation={0}
-          sx={{
-            opacity: visible ? 1 : 0,
-            transition: 'opacity 0.3s ease-out',
-          }}
-        >
-          <Toolbar>
-            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              {title}
-            </Typography>
-            <IconButton
-              edge="end"
-              color="inherit"
-              aria-label="close"
-              onClick={handleClose}
-            >
-              <CloseIcon />
-            </IconButton>
-          </Toolbar>
-        </AppBar>
-        <video
-          autoPlay
-          controls
-          style={{ width: '100%', height: '100%' }}
-          onLoadStart={e => (e.target as HTMLVideoElement).focus()}
-        >
-          <source src={source} />
-        </video>
-      </Dialog>
     </Box>
   );
 }

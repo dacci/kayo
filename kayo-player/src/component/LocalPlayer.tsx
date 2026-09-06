@@ -1,8 +1,11 @@
+import ArrowCircleLeftIcon from '@mui/icons-material/ArrowCircleLeft';
+import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
 import CloseIcon from '@mui/icons-material/Close';
 import FastForwardIcon from '@mui/icons-material/FastForward';
 import FastRewindIcon from '@mui/icons-material/FastRewind';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import SearchIcon from '@mui/icons-material/Search';
 import Box from '@mui/material/Box';
 import Dialog from '@mui/material/Dialog';
 import IconButton from '@mui/material/IconButton';
@@ -102,6 +105,21 @@ function LocalPlayer(props: LocalPlayerProps) {
     }
   };
 
+  const [bisectRatio, setBisectRatio] = useState(0);
+  const [bisectPos, setBisectPos] = useState(0);
+  const bisectReset = () => {
+    video.current!.currentTime = duration * 0.5;
+    setBisectRatio(0.5);
+    setBisectPos(0.5);
+  };
+  const bisect = (dir: number) => {
+    const ratio = bisectRatio / 2;
+    const pos = bisectPos + ratio * Math.sign(dir);
+    video.current!.currentTime = duration * pos;
+    setBisectRatio(ratio);
+    setBisectPos(pos);
+  };
+
   return (
     <Dialog
       fullScreen
@@ -178,16 +196,41 @@ function LocalPlayer(props: LocalPlayerProps) {
             }}
           />
         </Toolbar>
-        <Toolbar variant="dense">
-          <IconButton onClick={playOrPause}>
-            {playing ? <PauseIcon /> : <PlayArrowIcon />}
-          </IconButton>
-          <IconButton onClick={() => video.current!.currentTime -= 10}>
-            <FastRewindIcon />
-          </IconButton>
-          <IconButton onClick={() => video.current!.currentTime += 10}>
-            <FastForwardIcon />
-          </IconButton>
+        <Toolbar
+          variant="dense"
+          sx={{ justifyContent: 'space-between' }}
+        >
+          <Box>
+            <IconButton onClick={playOrPause}>
+              {playing ? <PauseIcon /> : <PlayArrowIcon />}
+            </IconButton>
+            <IconButton onClick={() => video.current!.currentTime -= 10}>
+              <FastRewindIcon />
+            </IconButton>
+            <IconButton onClick={() => video.current!.currentTime += 10}>
+              <FastForwardIcon />
+            </IconButton>
+            <Box>
+              {`${formatTime(currentTime)} / ${formatTime(duration)}`}
+            </Box>
+          </Box>
+          <Box>
+            <IconButton onClick={() => bisectReset()}>
+              <SearchIcon />
+            </IconButton>
+            <IconButton
+              disabled={bisectRatio === 0}
+              onClick={() => bisect(-1)}
+            >
+              <ArrowCircleLeftIcon />
+            </IconButton>
+            <IconButton
+              disabled={bisectRatio === 0}
+              onClick={() => bisect(1)}
+            >
+              <ArrowCircleRightIcon />
+            </IconButton>
+          </Box>
         </Toolbar>
       </Stack>
     </Dialog>

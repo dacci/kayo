@@ -123,7 +123,7 @@ function RemotePlayer(props: RemotePlayerProps) {
               <FastForwardIcon />
             </IconButton>
           </Box>
-          <Box sx={{ paddingRight: 1 }}>
+          <Box sx={{ display: 'inline-flex', padding: 1 }}>
             {`${formatTime(currentTime)} / ${formatTime(duration)}`}
           </Box>
         </Toolbar>

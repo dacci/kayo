@@ -210,7 +210,7 @@ function LocalPlayer(props: LocalPlayerProps) {
             <IconButton onClick={() => video.current!.currentTime += 10}>
               <FastForwardIcon />
             </IconButton>
-            <Box>
+            <Box sx={{ padding: 1, display: 'inline-flex' }}>
               {`${formatTime(currentTime)} / ${formatTime(duration)}`}
             </Box>
           </Box>
